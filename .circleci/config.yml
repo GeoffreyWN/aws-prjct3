@@ -216,6 +216,7 @@ jobs:
           command: |
             # ansible-playbook -i ./.circleci/ansible/inventory.txt ./.circleci/ansible/configure-server.yml -vvv
             cat ./.circleci/ansible/inventory.txt
+            sleep 120
             ansible -i ./.circleci/ansible/inventory.txt all -m ping
 
       # Here's where you will add some code to rollback on failure
