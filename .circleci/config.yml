@@ -19,14 +19,13 @@ commands:
             aws s3 rm s3://udapeople-<< parameters.id >> --recursive
             aws cloudformation delete-stack --stack-name udapeople-frontend-<< parameters.id >>
 
-
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
     parameters:
       when:
         type: string
       id:
-        type: string       
+        type: string
     steps:
       - run:
           name: Revert migrations
@@ -39,7 +38,7 @@ commands:
               npm run migrations:revert
             fi
           when: on_fail
-            
+
 jobs:
   build-frontend:
     docker:
@@ -92,7 +91,7 @@ jobs:
             cd frontend
             npm install
             npm run test
-                
+
   test-backend:
     docker:
       # Docker image here
@@ -110,7 +109,7 @@ jobs:
             cd backend
             npm install
             npm run test
-            
+
   scan-frontend:
     docker:
       # Docker image here
@@ -168,7 +167,7 @@ jobs:
               --template-file .circleci/files/backend.yml \
               --tags project=udapeople \
               --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
       - run:
           name: Ensure front-end infrastructure exist
           command: |
@@ -176,7 +175,7 @@ jobs:
               --template-file .circleci/files/frontend.yml \
               --tags project=udapeople \
               --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
-              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
       - run:
           name: Add back-end ip to ansible inventory
           command: |
@@ -185,6 +184,9 @@ jobs:
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
             --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
             --output text >> inventory.txt
+            echo "" >> inventory.txt
+            echo "[all:vars]" >> inventory.txt
+            echo "ansible_user=ec2-user" >> inventory.txt
             cat inventory.txt
       - persist_to_workspace:
           root: .
@@ -192,7 +194,7 @@ jobs:
             - ./.circleci/ansible/inventory.txt
       # Here's where you will add some code to rollback on failure
       - destroy-environment:
-          id: "${CIRCLE_WORKFLOW_ID:0:7}"     
+          id: "${CIRCLE_WORKFLOW_ID:0:7}"
 
   configure-infrastructure:
     docker:
@@ -224,7 +226,7 @@ jobs:
   run-migrations:
     docker:
       # Docker image here that supports NodeJS
-      - image: circleci/node:13.8.0 
+      - image: circleci/node:13.8.0
     steps:
       # Checkout code from git
       - checkout
@@ -246,12 +248,12 @@ jobs:
             fi
       # Here's where you will add some code to rollback on failure
       - destroy-environment:
-          id: ${CIRCLE_WORKFLOW_ID:0:7}      
+          id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   deploy-frontend:
     docker:
       # Docker image here that supports AWS CLI
-      - image: circleci/node:13.8.0 
+      - image: circleci/node:13.8.0
 
     steps:
       # Checkout code from git
@@ -296,11 +298,10 @@ jobs:
           id: ${CIRCLE_WORKFLOW_ID:0:7}
           when: on_fail
 
-                    
   deploy-backend:
     docker:
       # Docker image here that supports Ansible
-      - image: python:3.7-alpine3.11 
+      - image: python:3.7-alpine3.11
 
     steps:
       # Checkout code from git
@@ -342,12 +343,12 @@ jobs:
           id: ${CIRCLE_WORKFLOW_ID:0:7}
       - revert-migrations:
           id: ${CIRCLE_WORKFLOW_ID:0:7}
-          when: on_fail  
+          when: on_fail
 
   smoke-test:
     docker:
       # Lightweight Docker image
-      - image: ubuntu 
+      - image: ubuntu
     steps:
       # Checkout code from git
       - checkout
@@ -388,13 +389,13 @@ jobs:
             else
                 return 1
             fi
-          
+
       # Here's where you will add some code to rollback on failure
       - destroy-environment:
           id: ${CIRCLE_WORKFLOW_ID:0:7}
       - revert-migrations:
           id: ${CIRCLE_WORKFLOW_ID:0:7}
-          when: on_fail   
+          when: on_fail
 
   # cloudfront-update:
   #   docker:
@@ -416,11 +417,11 @@ jobs:
   #             -- tags project=udapeople
   #             -- stack-name udapeople-cloudfront-production \
   #             -- parameter-overrides WorkflowID=${CIRCLE_WORKFLOW_ID:0:7 } \
-  #     # Here's where you will add some code to rollback on failure  
+  #     # Here's where you will add some code to rollback on failure
   #     - revert-migrations:
   #         id: ${CIRCLE_WORKFLOW_ID:0:7}
-  #         when: on_fail 
-  
+  #         when: on_fail
+
   # cleanup:
   #     docker:
   #       # Docker image here
@@ -436,11 +437,11 @@ jobs:
   #             --query "Exports[?Name==\`WorkflowID\`].Value" \
   #             --no-paginate --output text)
   #             export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
-  #             --stack-status-filter CREATE_COMPLETE --no-paginate --output text)) 
-  #             echo Stack names: "${STACKS[@]}" 
+  #             --stack-status-filter CREATE_COMPLETE --no-paginate --output text))
+  #             echo Stack names: "${STACKS[@]}"
   #             echo OldWorkflowID: "${OldWorkflowID}"
   #             echo CIRCLE_WORKFLOW_ID "${CIRCLE_WORKFLOW_ID:0:7}"
-              
+
   #       - run:
   #           name: Remove old stacks and files
   #           command: |
@@ -453,12 +454,11 @@ jobs:
   #             else
   #                 echo "nothing to delete"
   #             fi
-              
+
   #             # if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
   #             # then
   #             #   # your code here
   #             # fi
-            
 
 workflows:
   default:
