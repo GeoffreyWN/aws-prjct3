@@ -217,7 +217,8 @@ jobs:
           command: |
             # ansible-playbook -i ./.circleci/ansible/inventory.txt ./.circleci/ansible/configure-server.yml -vvv
             cat ./.circleci/ansible/inventory.txt
-            IP=$(cat ./.circleci/ansible/ip.txt) && ping -c 3 $IP
+            IP=$(cat ./.circleci/ansible/ip.txt)
+            echo $IP
             ansible -i ./.circleci/ansible/inventory.txt all -m ping
 
       # Here's where you will add some code to rollback on failure
