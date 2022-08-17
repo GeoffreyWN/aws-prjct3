@@ -217,8 +217,8 @@ jobs:
           command: |
             cd ./.circleci/ansible
             sleep 120
-            ansible-playbook -i inventory.txt configure-server.yml -vvv
-            # ansible -i inventory.txt all -m ping -vvv
+            # ansible-playbook -i inventory.txt configure-server.yml -vvv
+            ansible -i inventory.txt all -m ping -vvv
 
       # Here's where you will add some code to rollback on failure
       - destroy-environment:
