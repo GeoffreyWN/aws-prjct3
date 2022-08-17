@@ -185,7 +185,7 @@ jobs:
             --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
             --output text >> inventory.txt
             echo "[all:vars]" >> inventory.txt
-            echo "ansible_user=ec2-user" >> inventory.txt
+            echo "ansible_user=ubuntu" >> inventory.txt
             cat inventory.txt
       - persist_to_workspace:
           root: .
@@ -216,8 +216,9 @@ jobs:
           name: Configure server
           command: |
             cd ./.circleci/ansible
-            # ansible-playbook -i inventory.txt configure-server.yml -vvv
-            ansible -i inventory.txt all -m ping -vvv
+            sleep 120
+            ansible-playbook -i inventory.txt configure-server.yml -vvv
+            # ansible -i inventory.txt all -m ping -vvv
 
       # Here's where you will add some code to rollback on failure
       - destroy-environment:
