@@ -184,8 +184,7 @@ jobs:
             aws ec2 describe-instances \
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
             --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-            --output text >> ip.txt
-            cat ip.txt >> inventory.txt
+            --output text >> inventory.txt
             cat inventory.txt
       - persist_to_workspace:
           root: .
@@ -215,9 +214,8 @@ jobs:
       - run:
           name: Configure server
           command: |
-            # ansible-playbook -i ./.circleci/ansible/inventory.txt ./.circleci/ansible/configure-server.yml -vvv
             cd ./.circleci/ansible
-            ansible -i inventory.txt all -m ping -vvv
+            ansible-playbook -i inventory.txt configure-server.yml -vvv
 
       # Here's where you will add some code to rollback on failure
       - destroy-environment:
