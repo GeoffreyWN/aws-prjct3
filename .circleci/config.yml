@@ -184,7 +184,6 @@ jobs:
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
             --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7" \
             --output text >> inventory.txt
-            echo "" >> inventory.txt
             echo "[all:vars]" >> inventory.txt
             echo "ansible_user=ec2-user" >> inventory.txt
             cat inventory.txt
