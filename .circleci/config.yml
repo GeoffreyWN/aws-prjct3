@@ -198,7 +198,7 @@ jobs:
   configure-infrastructure:
     docker:
       # Docker image here that supports Ansible
-      - image: python:3.7-alpine3.11
+      - image: python:3.10-alpine3.16
     steps:
       # Checkout code from git
       - checkout
@@ -211,7 +211,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apk add --update ansible
+            apk add --update --no-cache ansible tar gzip aws-cli openssh
       - run:
           name: Configure server
           command: |
@@ -220,8 +220,8 @@ jobs:
             # ansible -i inventory.txt all -m ping -vvv
 
       # Here's where you will add some code to rollback on failure
-     # - destroy-environment:
-     #     id: ${CIRCLE_WORKFLOW_ID:0:7}
+      - destroy-environment:
+         id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   run-migrations:
     docker:
