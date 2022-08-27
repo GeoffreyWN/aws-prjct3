@@ -372,7 +372,7 @@ jobs:
             apk add --update curl tar gzip nodejs npm ansible aws-cli
             # pip install awscli
       - run:
-          name: Get backend url
+          name: Get backend url and perform backend smoke test
           command: |
             export BACKEND_IP=$(aws ec2 describe-instances \
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
@@ -380,7 +380,9 @@ jobs:
             --output text)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "API_URL = ${API_URL}" \
-            if curl "${API_URL}/api/status" | grep "ok"
+            echo "sleeping for 1 min"
+            sleep 60
+            if curl -v "${API_URL}/api/status" | grep "ok"
             then
                 return 0
             else
