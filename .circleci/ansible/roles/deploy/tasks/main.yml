@@ -31,12 +31,16 @@
     chdir: /home/ubuntu/app/dist
   environment:
     ENVIRONMENT: production
-    TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_CONNECTION')}}"  
-    TYPEORM_ENTITIES: "{{ lookup('env', 'TYPEORM_ENTITIES')}}"
+    # TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_CONNECTION')}}"  
+    TYPEORM_CONNECTION: postgres
+    # TYPEORM_ENTITIES: "{{ lookup('env', 'TYPEORM_ENTITIES')}}"
+    TYPEORM_ENTITIES: "/home/ubuntu/app/dist/modules/domain/**/*.entity{.ts,.js}"
+    # TYPEORM_MIGRATIONS_DIR: "{{ lookup('env', 'TYPEORM_MIGRATIONS_DIR')}}"
+    TYPEORM_MIGRATIONS_DIR: "/home/ubuntu/app/dist/migrations"
+    # TYPEORM_MIGRATIONS: "{{ lookup('env', 'TYPEORM_MIGRATIONS')}}"
+    TYPEORM_MIGRATIONS: "/home/ubuntu/app/dist/migrations/*.js"
     TYPEORM_HOST: "{{ lookup('env', 'TYPEORM_HOST')}}"
     TYPEORM_PORT: 5432
     TYPEORM_USERNAME: "{{ lookup('env', 'TYPEORM_USERNAME')}}"
     TYPEORM_PASSWORD: "{{ lookup('env', 'TYPEORM_PASSWORD')}}"
     TYPEORM_DATABASE: "{{ lookup('env', 'TYPEORM_DATABASE')}}"
-    TYPEORM_MIGRATIONS: "{{ lookup('env', 'TYPEORM_MIGRATIONS')}}"
-    TYPEORM_MIGRATIONS_DIR: "{{ lookup('env', 'TYPEORM_MIGRATIONS_DIR')}}"
