@@ -216,7 +216,7 @@ jobs:
           name: Configure server
           command: |
             cd ./.circleci/ansible
-            # sleep 120
+            # sleep 300
             ansible-playbook -i inventory.txt configure-server.yml -vvv
             # ansible -i inventory.txt all -m ping -vvv
 
