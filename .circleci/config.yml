@@ -6,6 +6,9 @@ commands:
     parameters:
       id:
         type: string
+    docker:
+      # Docker image here that supports AWS CLI
+      - image: amazon/aws-cli
     steps:
       - run:
           name: Destroy environments - udapeople backend cfn stack
@@ -216,7 +219,6 @@ jobs:
           name: Configure server
           command: |
             cd ./.circleci/ansible
-            # sleep 600
             ansible-playbook -i inventory.txt configure-server.yml -vvv
             # ansible -i inventory.txt all -m ping -vvv
 
