@@ -360,7 +360,7 @@ jobs:
   smoke-test:
     docker:
       # Lightweight Docker image
-      - image: ubuntu
+      - image: python:3.10-alpine3.16
     steps:
       # Checkout code from git
       - checkout
@@ -368,9 +368,9 @@ jobs:
           name: Install dependencies
           working_directory: /tmp
           command: |
-            apt install ansible
-            apk add --update curl nodejs npm
-            pip install awscli
+            # apt install ansible
+            apk add --update curl tar gzip nodejs npm ansible aws-cli
+            # pip install awscli
       - run:
           name: Get backend url
           command: |
